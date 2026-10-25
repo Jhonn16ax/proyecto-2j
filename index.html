@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>Speed Rivals — Neon Circuit</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script defer src="game.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#"><span class="brand-mark">SR</span><span>SPEED <b>RIVALS</b><small>NEON CIRCUIT</small></span></a>
+      <div class="online-pill"><span class="dot"></span><span id="connectionStatus">Modo demo</span></div>
+    </header>
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">ARCADE RACING / TEMPORADA 01</p>
+          <h1>Domina la pista.<br><span>Rompe el récord.</span></h1>
+          <p class="intro">Acelera, esquiva el tráfico y deja tu mejor tiempo en la tabla global.</p>
+        </div>
+        <div class="hero-stat"><span class="stat-icon">🏁</span><div><strong>3</strong><small>VUeltas para ganar</small></div></div>
+      </section>
+      <section class="game-layout">
+        <div class="game-panel panel">
+          <div class="panel-heading">
+            <div><span class="section-kicker">01 / CARRERA</span><h2>Neon Highway</h2></div>
+            <div class="race-badge"><span class="pulse"></span> CIRCUITO ACTIVO</div>
+          </div>
+          <div class="track-wrap">
+            <canvas id="gameCanvas" width="800" height="520" aria-label="Juego de carreras"></canvas>
+            <div id="startOverlay" class="overlay">
+              <div class="start-card">
+                <div class="start-icon">🏎️</div>
+                <p class="eyebrow">¿LISTO PARA CORRER?</p>
+                <h2>Tu carrera<br>empieza ahora.</h2>
+                <p>Esquiva los coches y aguanta 45 segundos para completar la carrera.</p>
+                <button id="startBtn" class="primary-btn">INICIAR CARRERA <span>→</span></button>
+              </div>
+            </div>
+            <div id="finishOverlay" class="overlay hidden">
+              <div class="start-card finish-card">
+                <div class="start-icon">🏆</div>
+                <p class="eyebrow">CARRERA FINALIZADA</p>
+                <h2 id="finishTitle">¡Buen trabajo!</h2>
+                <p id="finishMessage">Tu resultado está listo.</p>
+                <button id="againBtn" class="primary-btn">CORRER OTRA VEZ <span>↻</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="controls-row">
+            <span><kbd>←</kbd> <kbd>→</kbd> Mover</span><span><kbd>A</kbd> <kbd>D</kbd> También sirve</span><span class="mobile-tip">En móvil: toca los lados de la pista</span>
+          </div>
+        </div>
+        <aside class="side-column">
+          <div class="panel stats-panel">
+            <div class="panel-heading compact"><div><span class="section-kicker">02 / TELEMETRÍA</span><h2>Tu carrera</h2></div><span class="live-tag">LIVE</span></div>
+            <div class="metric-grid">
+              <div class="metric"><span>TIEMPO</span><strong id="timeValue">45.0<span>s</span></strong></div>
+              <div class="metric"><span>PUNTOS</span><strong id="scoreValue">0000</strong></div>
+              <div class="metric"><span>VELOCIDAD</span><strong id="speedValue">0<span> km/h</span></strong></div>
+              <div class="metric"><span>RÉCORD PERSONAL</span><strong id="bestValue">—</strong></div>
+            </div>
+            <div class="progress-label"><span>PROGRESO DE CARRERA</span><b id="progressText">0%</b></div>
+            <div class="progress-track"><div id="progressBar"></div></div>
+          </div>
+          <div class="panel leaderboard-panel">
+            <div class="panel-heading compact"><div><span class="section-kicker">03 / COMPETENCIA</span><h2>Tabla de pilotos</h2></div><span class="trophy">✦</span></div>
+            <p class="muted">Los mejores resultados compartidos.</p>
+            <div id="leaderboard" class="leaderboard">
+              <div class="empty-state">Todavía no hay récords.<br>¡Sé el primero en la tabla!</div>
+            </div>
+            <button id="refreshBtn" class="secondary-btn">↻ ACTUALIZAR TABLA</button>
+          </div>
+        </aside>
+      </section>
+      <section class="submit-panel panel">
+        <div class="submit-copy"><span class="section-kicker">04 / REGISTRA TU RESULTADO</span><h2>¿Tienes lo necesario?</h2><p>Termina una carrera y guarda tu puntaje para que otros pilotos puedan verlo.</p></div>
+        <form id="scoreForm" class="score-form">
+          <label for="playerName">NOMBRE DE PILOTO</label>
+          <div class="form-row"><input id="playerName" maxlength="18" placeholder="Ej. JH0NN_RACER" required autocomplete="nickname"><button id="saveBtn" class="primary-btn" type="submit" disabled>GUARDAR RÉCORD ↗</button></div>
+          <p id="saveMessage" class="form-message">Completa una carrera para poder guardar tu resultado.</p>
+        </form>
+      </section>
+      <footer><span>© 2026 SPEED RIVALS</span><span>HECHO PARA COMPETIR <b>◆</b></span></footer>
+    </main>
+  </div>
+</body>
+</html>
