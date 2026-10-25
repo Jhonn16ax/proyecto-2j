@@ -1,42 +1,55 @@
-# Speed Rivals — Laboratorio 4 CMP1001
+# Speed Rivals — Laboratorio 4
 
-Juego arcade de carreras 2D para navegador. Incluye controles de teclado/táctiles, obstáculos, puntaje, tiempo de carrera y tabla de récords compartida usando Supabase.
+Aplicación web arcade de carreras. Cada jugador termina una carrera, guarda un nombre y una puntuación en Supabase, y cualquier otro navegador puede ver ese resultado en la tabla compartida. No requiere cuentas de usuario ni multijugador en tiempo real.
 
-## Archivos
-- `index.html`: página del juego.
-- `styles.css`: diseño adaptable a computadora y móvil.
-- `game.js`: lógica de la carrera y conexión con Supabase.
-- `config.js`: URL y clave publicable de Supabase.
-- `supabase.sql`: tabla y políticas de acceso.
+## Estado actual
+- Código guardado en este repositorio público de GitHub.
+- La tabla compartida está preparada en `game.js` y el SQL está en `supabase.sql`.
+- **Antes de que funcione la persistencia real**, hay que crear un proyecto Supabase, ejecutar el SQL y completar `config.js` con los valores del propio proyecto.
+- **Antes de entregar**, también hay que publicar el repositorio en Vercel y tomar las cuatro capturas reales. No inventes capturas ni afirmes que está conectado hasta comprobarlo.
 
-## 1. Crear la base de datos
-1. Entra a https://supabase.com y crea un proyecto.
-2. Abre **SQL Editor** > **New query**.
-3. Copia todo el contenido de `supabase.sql` y pulsa **Run**.
-4. En Project Settings / Data API (o botón Connect), copia **Project URL** y **publishable key** (`sb_publishable_...`).
+## Paso 1 — Crear la tabla de Supabase
+1. Entra a https://supabase.com/dashboard y crea un proyecto.
+2. En el proyecto, abre **SQL Editor** → **New query**.
+3. Abre el archivo `supabase.sql` de este repositorio, copia todo su contenido, pégalo en SQL Editor y pulsa **Run**.
+4. Confirma que la consulta termina sin error.
 
-## 2. Conectar el juego
-Abre `config.js` y reemplaza:
-- `PEGA_AQUI_TU_PROJECT_URL` por la Project URL.
-- `PEGA_AQUI_TU_PUBLISHABLE_KEY` por la clave publicable.
+## Paso 2 — Conectar el juego
+1. En Supabase, abre **Project Settings** → **API** (o **Connect**, según la interfaz).
+2. Copia la **Project URL** y la **publishable key** (normalmente comienza con `sb_publishable_`; en proyectos antiguos puede aparecer una clave `anon`).
+3. En GitHub, abre `config.js` → el lápiz **Edit**.
+4. Reemplaza los dos textos `PEGA_AQUI...` por tus valores reales:
+   - `window.SUPABASE_URL`: Project URL.
+   - `window.SUPABASE_PUBLISHABLE_KEY`: publishable/anon key.
+5. Pulsa **Commit changes**.
 
-No uses una clave `sb_secret_...` en el navegador ni la subas a GitHub.
+**Seguridad:** el navegador solo debe usar la clave publishable/anon y políticas RLS. Nunca pegues una clave `sb_secret_` ni una `service_role` en el código, en el chat o en GitHub.
 
-## 3. Probar en tu computadora
-Abre `index.html` en el navegador. Si la conexión está bien, arriba dirá “Supabase conectado”. Para evitar problemas con el navegador, también puedes usar la extensión Live Server de VS Code.
+## Paso 3 — Publicar en Vercel
+1. Entra a https://vercel.com y elige **Continue with GitHub**.
+2. Pulsa **Add New…** → **Project**.
+3. Importa el repositorio `Jhonn16ax/proyecto-2j`.
+4. Deja la configuración por defecto para una página estática (sin framework ni comando de build) y pulsa **Deploy**.
+5. Cuando termine, abre la dirección `*.vercel.app` que Vercel muestre. Comprueba que el juego carga y que el estado superior indica **Supabase conectado**.
 
-## 4. Publicar en GitHub y Vercel
-Este proyecto es HTML/CSS/JavaScript estático: no necesita build command ni framework. En Vercel, importa este repositorio desde GitHub y pulsa **Deploy**.
+## Paso 4 — Probar persistencia y dos usuarios
+1. En la página publicada, juega una carrera de 45 segundos.
+2. Escribe un nombre de piloto de 2 a 18 caracteres y guarda el resultado. La tabla debe mostrarlo.
+3. Sin borrar el resultado, recarga la página: el mismo récord debe seguir en la tabla.
+4. Abre la misma URL de Vercel en una ventana privada u otro navegador. Pulsa **Actualizar tabla**: debe aparecer el récord anterior.
+5. En el primer navegador, termina otra carrera y guarda un resultado como `PILOTO_A`.
+6. En el segundo navegador, pulsa **Actualizar tabla** y captura cómo aparece el resultado de `PILOTO_A`.
 
-## 5. Pruebas para las cuatro capturas del laboratorio
-1. **Antes de recargar:** termina una carrera, escribe un nombre y guarda el récord. Captura la tabla con el nuevo resultado.
-2. **Otro navegador:** abre el dominio de Vercel en ventana privada u otro navegador y muestra que el mismo récord sigue ahí.
-3. **Usuario A hace algo:** en un navegador, termina una carrera y guarda el récord con un nombre como `PILOTO_A`.
-4. **Usuario B lo ve:** en otro navegador, pulsa “Actualizar tabla” y captura el récord de `PILOTO_A`.
+## Las cuatro capturas que pide el laboratorio
+- **Captura 1:** resultado guardado y visible antes de recargar.
+- **Captura 2:** el mismo resultado visible en otro navegador/dispositivo.
+- **Captura 3:** el usuario A termina una carrera y guarda su resultado.
+- **Captura 4:** el usuario B ve el resultado de A al actualizar la tabla.
 
-El PDF pide cuatro capturas: las dos primeras demuestran persistencia y las dos últimas que la acción de A aparece para B. La actualización puede ser manual; no se necesita tiempo real.
+Usa capturas reales de tu aplicación publicada. Coloca en el PDF de D2L: URL de Vercel, URL del repositorio GitHub, URL del commit, las cuatro capturas y una frase comparando esta versión con Proyecto 2 (qué función falta y qué implementarías primero).
 
-## Notas
-- Esta versión guarda los resultados de forma compartida en Supabase una vez que configures las credenciales y ejecutes el SQL.
-- El juego no implementa cuentas individuales ni multijugador en tiempo real, porque el Laboratorio 4 no los exige.
-- La tabla pública usa nombres de piloto y puntajes inventados. No introduzcas datos personales.
+## Solución de problemas
+- Si muestra **Falta configurar Supabase**, revisa `config.js` y confirma que hiciste commit.
+- Si no carga la tabla, vuelve a ejecutar `supabase.sql` y revisa que las políticas RLS existan.
+- Si cambiaste `config.js`, espera a que Vercel termine el nuevo despliegue y recarga con Ctrl+F5.
+- Los resultados solo se comparten si todos abren el mismo despliegue conectado al mismo proyecto Supabase.
